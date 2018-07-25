@@ -1,0 +1,7 @@
+.vs/
+.idea/
+bower_components/
+node_modules/
+
+*.map
+ts.js
