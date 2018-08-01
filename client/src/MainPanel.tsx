@@ -4,6 +4,8 @@
 
 import RX = require('reactxp');
 
+import Camera from './Camera';
+
 interface MainPanelProps {
     onPressNavigate: () => void;
 }
@@ -83,6 +85,7 @@ class MainPanel extends RX.Component<MainPanelProps, null> {
             <RX.View useSafeInsets={ true }>
                 <RX.ScrollView style={ styles.scroll }>
                     <RX.View style={ styles.container }>
+                        <Camera/>
                         <RX.Animated.Text style={ [styles.helloWorld, this._animatedStyle] }>
                             Hello World
                         </RX.Animated.Text>
