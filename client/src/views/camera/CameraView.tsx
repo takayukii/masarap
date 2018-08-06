@@ -4,7 +4,7 @@
 
 import RX = require('reactxp');
 
-import Camera from './Camera';
+import Camera from '../../components/Camera';
 
 interface MainPanelProps {
     onPressNavigate: () => void;
@@ -52,7 +52,7 @@ const styles = {
     })
 };
 
-class MainPanel extends RX.Component<MainPanelProps, null> {
+class CameraView extends RX.Component<MainPanelProps, null> {
     private _translationValue: RX.Animated.Value;
     private _animatedStyle: RX.Types.AnimatedTextStyleRuleSet;
 
@@ -115,4 +115,4 @@ class MainPanel extends RX.Component<MainPanelProps, null> {
     }
 }
 
-export = MainPanel;
+export = CameraView;

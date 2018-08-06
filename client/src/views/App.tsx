@@ -5,8 +5,8 @@
 import Navigator, { Types, NavigatorDelegateSelector as DelegateSelector } from 'reactxp-navigation';
 import RX = require('reactxp');
 
-import MainPanel = require('./MainPanel');
-import SecondPanel = require('./SecondPanel');
+import MainPanel = require('./camera/CameraView');
+import SecondPanel = require('./keywords/KeywordsView');
 
 enum NavigationRouteId {
     MainPanel,

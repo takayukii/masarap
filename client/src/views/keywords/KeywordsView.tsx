@@ -5,8 +5,8 @@
 import RX = require('reactxp');
 import { default as RXVideo } from 'reactxp-video';
 
-import ProgressIndicator from './ProgressIndicator';
-import ToggleSwitch from './ToggleSwitch';
+import ProgressIndicator from '../../components/ProgressIndicator';
+import ToggleSwitch from '../../components/ToggleSwitch';
 
 interface SecondPanelProps {
     onNavigateBack: () => void;
@@ -56,7 +56,7 @@ const styles = {
     })
 };
 
-class SecondPanel extends RX.Component<SecondPanelProps, SecondPanelState> {
+class KeywordsView extends RX.Component<SecondPanelProps, SecondPanelState> {
     private _progressTimerToken: number;
     private _mountedVideo: RXVideo;
 
@@ -161,4 +161,4 @@ class SecondPanel extends RX.Component<SecondPanelProps, SecondPanelState> {
     }
 }
 
-export = SecondPanel;
+export = KeywordsView;
