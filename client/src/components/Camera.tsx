@@ -1,6 +1,10 @@
-﻿import RX = require('reactxp');
+﻿import extend = require('lodash/extend');
+import RX = require('reactxp');
+
+import {StyleRuleSetRecursive, ViewStyleRuleSet} from 'reactxp/dist/common/Types';
 
 export interface CameraProps extends RX.CommonProps {
+    style?: StyleRuleSetRecursive<ViewStyleRuleSet>
 }
 
 const constraints = {
@@ -36,8 +40,29 @@ class Camera extends RX.Component<CameraProps, null> {
 
     render() {
         if (RX.Platform.getType() === 'web') {
+            let combinedStyles = extend({
+                display: 'flex'
+            }, RX.Styles.combine(this.props.style));
+            combinedStyles = extend({
+                position: 'absolute',
+                minWidth: '100%',
+                minHeight: '100%',
+                width: 'auto',
+                height: 'auto',
+                top: '50%',
+                left: '50%',
+                WebkitTransform: 'translate(-50%,-50%)',
+                MozTransform: 'translate(-50%,-50%)',
+                msTransform: 'translate(-50%,-50%)',
+                transform: 'translate(-50%,-50%)'
+            }, combinedStyles);
             return (
-                <video autoPlay playsInline />
+                <video
+                    ref='video'
+                    style={ combinedStyles }
+                    autoPlay
+                    playsInline
+                />
             );
         }
         return null;
