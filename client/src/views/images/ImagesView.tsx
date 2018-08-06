@@ -74,7 +74,7 @@ class KeywordsView extends RX.Component<ImagesViewProps> {
             return list.map(num => (
                 <RX.View key={num} style={styles.listItem}>
                     <RX.Button >
-                        <RX.Image style={styles.listItemImage} source={'http://placekitten.com/g/300/300'} />
+                        <RX.Image style={styles.listItemImage} source={'https://placekitten.com/g/300/300'} />
                         <RX.Text style={ styles.listItemText }>
                             {num}
                         </RX.Text>

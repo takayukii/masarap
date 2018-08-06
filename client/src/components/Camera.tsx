@@ -20,8 +20,10 @@ class Camera extends RX.Component<CameraProps, null> {
     private video: HTMLVideoElement;
 
     componentDidMount() {
-        this.video = document.querySelector('video');
-        window.navigator.mediaDevices.getUserMedia(constraints).then(this.handleSuccess).catch(this.handleError);
+        if (RX.Platform.getType() === 'web') {
+            this.video = document.querySelector('video');
+            window.navigator.mediaDevices.getUserMedia(constraints).then(this.handleSuccess).catch(this.handleError);
+        }
     }
 
     handleSuccess = (stream: MediaStream) => {
