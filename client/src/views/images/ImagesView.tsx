@@ -29,10 +29,6 @@ const styles = {
         shadowOffset: { height: 3, width: 0 },
         shadowColor: '#f0f0f0'
     }),
-    search: RX.Styles.createViewStyle({
-        flexGrow: 1,
-        justifyContent: 'flex-end'
-    }),
     scroll: RX.Styles.createScrollViewStyle({
         height: height - theme.header.height,
         alignSelf: 'stretch'
@@ -94,7 +90,7 @@ class KeywordsView extends RX.Component<ImagesViewProps> {
             <RX.View useSafeInsets={ true } style={ styles.container }>
                 <RX.View style={styles.header}>
                     <BackButton onPress={this._onPressBack} />
-                    <SearchBox style={ styles.search } />
+                    <SearchBox />
                 </RX.View>
                 <RX.ScrollView style={ styles.scroll }>
                     <RX.View style={ styles.listItems }>
