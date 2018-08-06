@@ -8,6 +8,7 @@ import RX = require('reactxp');
 import CameraView = require('./camera/CameraView');
 import KeywordsView = require('./keywords/KeywordsView');
 import ImagesView = require('./images/ImagesView');
+import Loading = require('../components/Loading');
 
 enum NavigationRouteId {
     MainPanel,
@@ -55,17 +56,31 @@ class App extends RX.Component<{}, null> {
     };
 
     private _onPressNavigateToSecond = () => {
-        this._navigator.push({
-            routeId: NavigationRouteId.SecondPanel,
-            sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
-        });
+        const modalId = 'loading';
+        RX.Modal.show(<Loading onPress={()=>{}} />, modalId);
+        setTimeout(() => {
+            this._navigator.push({
+                routeId: NavigationRouteId.SecondPanel,
+                sceneConfigType: Types.NavigatorSceneConfigType.Fade
+            });
+            setTimeout(() => {
+                RX.Modal.dismiss(modalId);
+            }, 1000);
+        }, 1000);
     };
 
     private _onPressNavigateToThird = () => {
-        this._navigator.push({
-            routeId: NavigationRouteId.ThirdPanel,
-            sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
-        });
+        const modalId = 'loading';
+        RX.Modal.show(<Loading onPress={()=>{}} />, modalId);
+        setTimeout(() => {
+            this._navigator.push({
+                routeId: NavigationRouteId.ThirdPanel,
+                sceneConfigType: Types.NavigatorSceneConfigType.Fade
+            });
+            setTimeout(() => {
+                RX.Modal.dismiss(modalId);
+            }, 1000);
+        }, 1000);
     };
 
     private _onPressBack = () => {
