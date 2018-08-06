@@ -16,7 +16,8 @@ interface MainPanelProps {
 const styles = {
     container: RX.Styles.createViewStyle({
         flexDirection: 'column',
-        minHeight: height
+        minHeight: height,
+        backgroundColor: theme.base.backgroundColor
     }),
     camera: RX.Styles.createViewStyle({
         flexGrow: 1

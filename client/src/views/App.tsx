@@ -5,20 +5,13 @@
 import Navigator, { Types, NavigatorDelegateSelector as DelegateSelector } from 'reactxp-navigation';
 import RX = require('reactxp');
 
-import MainPanel = require('./camera/CameraView');
-import SecondPanel = require('./keywords/KeywordsView');
+import CameraView = require('./camera/CameraView');
+import KeywordsView = require('./keywords/KeywordsView');
 
 enum NavigationRouteId {
     MainPanel,
     SecondPanel
 }
-
-const styles = {
-    // Standard navigator style should be an object. So we have to disable caching here.
-    navCardStyle: RX.Styles.createViewStyle({
-        backgroundColor: '#f5fcff'
-    }, false)
-};
 
 class App extends RX.Component<{}, null> {
     private _navigator: Navigator;
@@ -35,7 +28,6 @@ class App extends RX.Component<{}, null> {
             <Navigator
                 ref={ this._onNavigatorRef }
                 renderScene={ this._renderScene }
-                cardStyle={ styles.navCardStyle }
                 delegateSelector={ DelegateSelector }
             />
         );
@@ -43,30 +35,30 @@ class App extends RX.Component<{}, null> {
 
     private _onNavigatorRef = (navigator: Navigator) => {
         this._navigator = navigator;
-    }
+    };
 
     private _renderScene = (navigatorRoute: Types.NavigatorRoute) => {
         switch (navigatorRoute.routeId) {
             case NavigationRouteId.MainPanel:
-                return <MainPanel onPressNavigate={ this._onPressNavigate } />;
+                return <CameraView onPressNavigate={ this._onPressNavigate } />;
 
             case NavigationRouteId.SecondPanel:
-                return <SecondPanel onNavigateBack={ this._onPressBack } />;
+                return <KeywordsView onNavigateBack={ this._onPressBack } />;
         }
 
         return null;
-    }
+    };
 
     private _onPressNavigate = () => {
         this._navigator.push({
             routeId: NavigationRouteId.SecondPanel,
             sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
         });
-    }
+    };
 
     private _onPressBack = () => {
         this._navigator.pop();
-    }
+    };
 }
 
 export = App;
