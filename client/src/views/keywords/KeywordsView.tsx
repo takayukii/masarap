@@ -42,6 +42,12 @@ const styles = {
     }),
     listItemText: RX.Styles.createTextStyle({
         fontSize: 20
+    }),
+    notFound: RX.Styles.createViewStyle({
+        height: height - theme.header.height,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
     })
 };
 
@@ -50,15 +56,24 @@ class KeywordsView extends RX.Component<KeywordsViewProps> {
         const list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
         const random = Math.floor(Math.random() * list.length);
         list.splice(random, list.length - random);
-        return list.map(num => (
-            <RX.View key={num} style={styles.listItem}>
-                <RX.Button onPress={this.props.onPressNavigate}>
-                    <RX.Text style={ styles.listItemText }>
-                        {num}
-                    </RX.Text>
-                </RX.Button>
-            </RX.View>
-        ));
+
+        if (list.length > 0) {
+            return list.map(num => (
+                <RX.View key={num} style={styles.listItem}>
+                    <RX.Button onPress={this.props.onPressNavigate}>
+                        <RX.Text style={ styles.listItemText }>
+                            {num}
+                        </RX.Text>
+                    </RX.Button>
+                </RX.View>
+            ));
+        }
+        return (
+          <RX.View style={styles.notFound}>
+            <RX.Text>Not found.</RX.Text>
+          </RX.View>
+        );
+
     }
 
     render() {
