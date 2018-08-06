@@ -7,10 +7,12 @@ import RX = require('reactxp');
 
 import CameraView = require('./camera/CameraView');
 import KeywordsView = require('./keywords/KeywordsView');
+import ImagesView = require('./images/ImagesView');
 
 enum NavigationRouteId {
     MainPanel,
-    SecondPanel
+    SecondPanel,
+    ThirdPanel
 }
 
 class App extends RX.Component<{}, null> {
@@ -40,18 +42,28 @@ class App extends RX.Component<{}, null> {
     private _renderScene = (navigatorRoute: Types.NavigatorRoute) => {
         switch (navigatorRoute.routeId) {
             case NavigationRouteId.MainPanel:
-                return <CameraView onPressNavigate={ this._onPressNavigate } />;
+                return <CameraView onPressNavigate={ this._onPressNavigateToSecond } />;
 
             case NavigationRouteId.SecondPanel:
-                return <KeywordsView onNavigateBack={ this._onPressBack } />;
+                return <KeywordsView onPressNavigate={ this._onPressNavigateToThird } onNavigateBack={ this._onPressBack } />;
+
+            case NavigationRouteId.ThirdPanel:
+                return <ImagesView onNavigateBack={ this._onPressBack } />;
         }
 
         return null;
     };
 
-    private _onPressNavigate = () => {
+    private _onPressNavigateToSecond = () => {
         this._navigator.push({
             routeId: NavigationRouteId.SecondPanel,
+            sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
+        });
+    };
+
+    private _onPressNavigateToThird = () => {
+        this._navigator.push({
+            routeId: NavigationRouteId.ThirdPanel,
             sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
         });
     };

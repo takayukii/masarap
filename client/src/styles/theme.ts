@@ -5,9 +5,6 @@ export default {
     header: {
       height: 50,
     },
-    backButton: {
-        size: 50
-    },
     snapButton: {
         height: 64,
         width: 64,
