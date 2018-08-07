@@ -4,7 +4,7 @@
 
 import RX = require('reactxp');
 
-import BackButton from '../../components/BackButton';
+import BackButton from '../../modules/BackButton';
 
 import theme from '../../styles/theme';
 

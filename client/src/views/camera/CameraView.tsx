@@ -4,7 +4,7 @@
 
 import RX = require('reactxp');
 
-import Camera from '../../components/Camera';
+import Camera from 'modules/Camera';
 import theme from '../../styles/theme';
 
 const { height } = RX.UserInterface.measureWindow();
@@ -38,11 +38,14 @@ const styles = {
 };
 
 class CameraView extends RX.Component<MainPanelProps, null> {
+    private camera: any;
     render() {
         return (
             <RX.View style={ styles.container }>
                 <RX.View style={ styles.camera }>
-                    <Camera />
+                    <Camera
+                        ref={(ref: any) => this.camera = ref}
+                    />
                 </RX.View>
                 <RX.View style={ styles.buttons }>
                     <RX.Button style={ styles.roundButton } onPress={ this._onPressNavigate }/>
@@ -52,6 +55,14 @@ class CameraView extends RX.Component<MainPanelProps, null> {
     }
     
     private _onPressNavigate = () => {
+        if (this.camera) {
+            console.log('takePicAsync', this.camera.takePicAsync);
+            this.camera.takePicAsync()
+                .then((base64: string) => {
+                    console.log(base64);
+                })
+                .catch(console.log);
+        }
         this.props.onPressNavigate();
     }
 }

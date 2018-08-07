@@ -4,8 +4,8 @@
 
 import RX = require('reactxp');
 
-import BackButton from '../../components/BackButton';
-import SearchBox from '../../components/SearchBox';
+import BackButton from '../../modules/BackButton';
+import SearchBox from '../../modules/SearchBox';
 
 import theme from '../../styles/theme';
 

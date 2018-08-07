@@ -1,1 +1,1 @@
-require('./dist/index');
+require('./temp/android/rnapp/js/index');

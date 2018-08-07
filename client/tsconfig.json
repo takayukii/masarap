@@ -10,12 +10,20 @@
     "reactNamespace": "RX",
     "module": "commonjs",
     "target": "es5",
+    "lib": ["es5", "es2015", "dom"],
     "experimentalDecorators": true,
     "sourceMap": true,
     "skipLibCheck": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
-    "outDir": "./dist/"
+    "outDir": "./dist/",
+    "baseUrl": ".",
+    "paths": {
+      "modules/*": [
+        "./src/modules/*/index.web",
+        "./src/modules/*/index"
+      ]
+    },
   },
   "include": [
     "./src/**/*"

@@ -8,7 +8,7 @@ import RX = require('reactxp');
 import CameraView = require('./camera/CameraView');
 import KeywordsView = require('./keywords/KeywordsView');
 import ImagesView = require('./images/ImagesView');
-import Loading = require('../components/Loading');
+import Loading = require('../modules/Loading');
 
 enum NavigationRouteId {
     MainPanel,

@@ -1,6 +1,7 @@
 ﻿import RX = require('reactxp');
 
-interface CameraProps extends RX.CommonProps {}
+interface CameraProps extends RX.CommonProps {
+}
 
 class Camera extends RX.Component<CameraProps, null> {
     private video: HTMLVideoElement;
@@ -26,6 +27,22 @@ class Camera extends RX.Component<CameraProps, null> {
 
     handleError = (error: Error) => {
         console.log('navigator.getUserMedia error: ', error);
+    };
+
+    takePicAsync: () => Promise<string> = () => {
+        return new Promise((resolve, reject) => {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = this.video.videoWidth;
+                canvas.height = this.video.videoHeight;
+                canvas.getContext('2d').
+                drawImage(this.video, 0, 0, canvas.width, canvas.height);
+                const jpegUrl = canvas.toDataURL("image/jpeg");
+                resolve(jpegUrl);
+            } catch(error) {
+                reject(error);
+            }
+        });
     };
 
     render() {
