@@ -5,10 +5,10 @@
 import Navigator, { Types, NavigatorDelegateSelector as DelegateSelector } from 'reactxp-navigation';
 import RX = require('reactxp');
 
-import CameraView = require('./camera/CameraView');
-import KeywordsView = require('./keywords/KeywordsView');
-import ImagesView = require('./images/ImagesView');
-import Loading = require('../modules/Loading');
+import CameraView = require('./views/CameraView');
+import KeywordsView = require('./views/KeywordsView');
+import ImagesView = require('./views/ImagesView');
+import Loading = require('./modules/Loading');
 
 enum NavigationRouteId {
     MainPanel,
@@ -55,9 +55,9 @@ class App extends RX.Component<{}, null> {
         return null;
     };
 
-    private _onPressNavigateToSecond = () => {
+    private _onPressNavigateToSecond = (message?: string) => {
         const modalId = 'loading';
-        RX.Modal.show(<Loading onPress={()=>{}} />, modalId);
+        RX.Modal.show(<Loading onPress={()=>{}} message={message ? message.slice(0, 10) : ''} />, modalId);
         setTimeout(() => {
             this._navigator.push({
                 routeId: NavigationRouteId.SecondPanel,

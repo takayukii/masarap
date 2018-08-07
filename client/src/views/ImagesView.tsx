@@ -4,10 +4,10 @@
 
 import RX = require('reactxp');
 
-import BackButton from '../../modules/BackButton';
-import SearchBox from '../../modules/SearchBox';
+import BackButton from '../modules/BackButton';
+import SearchBox from '../modules/SearchBox';
 
-import theme from '../../styles/theme';
+import theme from '../styles/theme';
 
 const { width, height } = RX.UserInterface.measureWindow();
 
@@ -61,7 +61,7 @@ const styles = {
     })
 };
 
-class KeywordsView extends RX.Component<ImagesViewProps> {
+class ImagesView extends RX.Component<ImagesViewProps> {
     renderList() {
         const list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
         const random = Math.floor(Math.random() * list.length);
@@ -107,4 +107,4 @@ class KeywordsView extends RX.Component<ImagesViewProps> {
 
 }
 
-export = KeywordsView;
+export = ImagesView;

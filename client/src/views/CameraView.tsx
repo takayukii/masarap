@@ -5,12 +5,12 @@
 import RX = require('reactxp');
 
 import Camera from 'modules/Camera';
-import theme from '../../styles/theme';
+import theme from '../styles/theme';
 
 const { height } = RX.UserInterface.measureWindow();
 
 interface MainPanelProps {
-    onPressNavigate: () => void;
+    onPressNavigate: (message?: string) => void;
 }
 
 const styles = {
@@ -59,11 +59,11 @@ class CameraView extends RX.Component<MainPanelProps, null> {
             console.log('takePicAsync', this.camera.takePicAsync);
             this.camera.takePicAsync()
                 .then((base64: string) => {
-                    console.log(base64);
+                    console.log('BASE64', base64);
+                    this.props.onPressNavigate(base64);
                 })
                 .catch(console.log);
         }
-        this.props.onPressNavigate();
     }
 }
 

@@ -7,8 +7,14 @@ interface CameraProps extends RX.CommonProps {}
 class Camera extends RX.Component<CameraProps, null> {
     private camera: any;
 
-    public takePicAsync: () => Promise<any> = () => {
-        return this.camera.takePictureAsync({ quality: 0.5, base64: true });
+    public takePicAsync: () => Promise<string> = () => {
+        return new Promise((resolve, reject) => {
+            this.camera.takePictureAsync({ quality: 0.5, base64: true })
+                .then((result: any) => {
+                    resolve(result.base64);
+                })
+                .catch(reject);
+        })
     };
 
     render() {

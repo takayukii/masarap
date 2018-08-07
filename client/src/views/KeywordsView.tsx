@@ -4,9 +4,9 @@
 
 import RX = require('reactxp');
 
-import BackButton from '../../modules/BackButton';
+import BackButton from '../modules/BackButton';
 
-import theme from '../../styles/theme';
+import theme from '../styles/theme';
 
 const { height } = RX.UserInterface.measureWindow();
 

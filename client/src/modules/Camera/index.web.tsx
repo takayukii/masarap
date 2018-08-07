@@ -58,9 +58,9 @@ class Camera extends RX.Component<CameraProps, null> {
                     height: 'auto',
                     top: '50%',
                     left: '50%',
-                    WebkitTransform: 'translate(-50%,-50%)',
-                    MozTransform: 'translate(-50%,-50%)',
-                    msTransform: 'translate(-50%,-50%)',
+                    // WebkitTransform: 'translate(-50%,-50%)',
+                    // MozTransform: 'translate(-50%,-50%)',
+                    // msTransform: 'translate(-50%,-50%)',
                     transform: 'translate(-50%,-50%)'
                 }}
                 autoPlay
