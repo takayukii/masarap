@@ -1,11 +1,6 @@
 ﻿import extend = require('lodash/extend');
 import RX = require('reactxp');
-
 import {StyleRuleSetRecursive, ViewStyleRuleSet} from 'reactxp/dist/common/Types';
-
-export interface CameraProps extends RX.CommonProps {
-    style?: StyleRuleSetRecursive<ViewStyleRuleSet>
-}
 
 const constraints = {
     audio: false,
@@ -16,8 +11,13 @@ const constraints = {
     }
 };
 
+export interface CameraProps extends RX.CommonProps {
+    style?: StyleRuleSetRecursive<ViewStyleRuleSet>
+}
+
 class Camera extends RX.Component<CameraProps, null> {
     private video: HTMLVideoElement;
+    private camera: any;
 
     componentDidMount() {
         if (RX.Platform.getType() === 'web') {
@@ -67,7 +67,24 @@ class Camera extends RX.Component<CameraProps, null> {
                 />
             );
         }
-        return null;
+        const { RNCamera } = require('react-native-camera');
+        const { StyleSheet } = require('react-native');
+
+        const styles = StyleSheet.create({
+            camera: {
+                flexGrow: 1
+            }
+        });
+
+        return (
+            <RNCamera
+                ref={(ref: any) => this.camera = ref}
+                style={styles.camera}
+                type={RNCamera.Constants.Type.back}
+                permissionDialogTitle={'Permission to use camera'}
+                permissionDialogMessage={'We need your permission to use your camera phone'}
+            />
+        );
     }
 }
 

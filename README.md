@@ -28,3 +28,23 @@ To run app on Android Simulator, ensure run Android simulator in advance and hit
 ```
 $ yarn android
 ```
+
+### RN modules
+
+#### react-native-camera
+
+[https://github.com/react-native-community/react-native-camera](https://github.com/react-native-community/react-native-camera)
+
+```
+$ node_modules/.bin/react-native link react-native-camera
+```
+
+#### iOS
+
+It required some entries on info.plist
+
+##### Android
+
+It required hectic gradle modifications
+
+[https://github.com/react-native-community/react-native-camera/issues/1490](https://github.com/react-native-community/react-native-camera/issues/1490)
