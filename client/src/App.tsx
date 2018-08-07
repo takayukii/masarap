@@ -2,7 +2,10 @@
 * This file demonstrates a basic ReactXP app.
 */
 // This example uses ExperimentalNavigation on iOS and Android
-import Navigator, { Types, NavigatorDelegateSelector as DelegateSelector } from 'reactxp-navigation';
+import Navigator, {
+    Types,
+    NavigatorDelegateSelector as DelegateSelector
+} from 'reactxp-navigation';
 import RX = require('reactxp');
 
 import CameraView = require('./views/CameraView');
@@ -20,18 +23,20 @@ class App extends RX.Component<{}, null> {
     private _navigator: Navigator;
 
     componentDidMount() {
-        this._navigator.immediatelyResetRouteStack([{
-            routeId: NavigationRouteId.MainPanel,
-            sceneConfigType: Types.NavigatorSceneConfigType.Fade
-        }]);
+        this._navigator.immediatelyResetRouteStack([
+            {
+                routeId: NavigationRouteId.MainPanel,
+                sceneConfigType: Types.NavigatorSceneConfigType.Fade
+            }
+        ]);
     }
 
     render() {
         return (
             <Navigator
-                ref={ this._onNavigatorRef }
-                renderScene={ this._renderScene }
-                delegateSelector={ DelegateSelector }
+                ref={this._onNavigatorRef}
+                renderScene={this._renderScene}
+                delegateSelector={DelegateSelector}
             />
         );
     }
@@ -43,13 +48,18 @@ class App extends RX.Component<{}, null> {
     private _renderScene = (navigatorRoute: Types.NavigatorRoute) => {
         switch (navigatorRoute.routeId) {
             case NavigationRouteId.MainPanel:
-                return <CameraView onPressNavigate={ this._onPressNavigateToSecond } />;
+                return <CameraView onPressNavigate={this._onPressNavigateToSecond} />;
 
             case NavigationRouteId.SecondPanel:
-                return <KeywordsView onPressNavigate={ this._onPressNavigateToThird } onNavigateBack={ this._onPressBack } />;
+                return (
+                    <KeywordsView
+                        onPressNavigate={this._onPressNavigateToThird}
+                        onNavigateBack={this._onPressBack}
+                    />
+                );
 
             case NavigationRouteId.ThirdPanel:
-                return <ImagesView onNavigateBack={ this._onPressBack } />;
+                return <ImagesView onNavigateBack={this._onPressBack} />;
         }
 
         return null;
@@ -57,7 +67,10 @@ class App extends RX.Component<{}, null> {
 
     private _onPressNavigateToSecond = (message?: string) => {
         const modalId = 'loading';
-        RX.Modal.show(<Loading onPress={()=>{}} message={message ? message.slice(0, 10) : ''} />, modalId);
+        RX.Modal.show(
+            <Loading onPress={() => {}} message={message ? message.slice(0, 10) : ''} />,
+            modalId
+        );
         setTimeout(() => {
             this._navigator.push({
                 routeId: NavigationRouteId.SecondPanel,
@@ -71,7 +84,7 @@ class App extends RX.Component<{}, null> {
 
     private _onPressNavigateToThird = () => {
         const modalId = 'loading';
-        RX.Modal.show(<Loading onPress={()=>{}} />, modalId);
+        RX.Modal.show(<Loading onPress={() => {}} />, modalId);
         setTimeout(() => {
             this._navigator.push({
                 routeId: NavigationRouteId.ThirdPanel,

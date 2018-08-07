@@ -53,7 +53,7 @@ const styles = {
 
 class KeywordsView extends RX.Component<KeywordsViewProps> {
     renderList() {
-        const list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+        const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
         const random = Math.floor(Math.random() * list.length);
         list.splice(random, list.length - random);
 
@@ -61,38 +61,32 @@ class KeywordsView extends RX.Component<KeywordsViewProps> {
             return list.map(num => (
                 <RX.View key={num} style={styles.listItem}>
                     <RX.Button onPress={this.props.onPressNavigate}>
-                        <RX.Text style={ styles.listItemText }>
-                            {num}
-                        </RX.Text>
+                        <RX.Text style={styles.listItemText}>{num}</RX.Text>
                     </RX.Button>
                 </RX.View>
             ));
         }
         return (
-          <RX.View style={styles.notFound}>
-            <RX.Text>Not found.</RX.Text>
-          </RX.View>
+            <RX.View style={styles.notFound}>
+                <RX.Text>Not found.</RX.Text>
+            </RX.View>
         );
-
     }
 
     render() {
         return (
-            <RX.View useSafeInsets={ true } style={ styles.container }>
+            <RX.View useSafeInsets={true} style={styles.container}>
                 <RX.View style={styles.header}>
                     <BackButton onPress={this._onPressBack} />
                 </RX.View>
-                <RX.ScrollView style={ styles.scroll }>
-                    {this.renderList()}
-                </RX.ScrollView>
+                <RX.ScrollView style={styles.scroll}>{this.renderList()}</RX.ScrollView>
             </RX.View>
         );
     }
 
     private _onPressBack = () => {
         this.props.onNavigateBack();
-    }
-
+    };
 }
 
 export = KeywordsView;

@@ -1,9 +1,9 @@
 /**
-* gulpfile.js
-* Copyright: Microsoft 2018
-*
-* Script for building the app.
-*/
+ * gulpfile.js
+ * Copyright: Microsoft 2018
+ *
+ * Script for building the app.
+ */
 
 var _ = require('lodash');
 var argv = require('yargs').argv;
@@ -32,6 +32,7 @@ var tslint = require('gulp-tslint');
 var tslintEng = require('tslint');
 var util = require('util');
 var watch = require('gulp-watch');
+var prettier = require('gulp-prettier-plugin');
 
 var PLATFORMS = {
     WEB: 'web',
@@ -45,13 +46,16 @@ var PLATFORMS = {
 // Configurations
 // --------------------------------------------------------------------- //
 
-var webpackEnv = _.merge({
-    PLATFORM: platform,
-    USESOURCEMAPS: argv.usesourcemaps,
-    USECODECOVERAGE: argv.usecodecoverage,
-    USEBABEL: argv.usebabel,
-    NOLODASHMINI: 'true'
-}, process.env);
+var webpackEnv = _.merge(
+    {
+        PLATFORM: platform,
+        USESOURCEMAPS: argv.usesourcemaps,
+        USECODECOVERAGE: argv.usecodecoverage,
+        USEBABEL: argv.usebabel,
+        NOLODASHMINI: 'true'
+    },
+    process.env
+);
 
 // Utility functions
 // --------------------------------------------------------------------- //
@@ -63,7 +67,16 @@ function getPlatform() {
         return PLATFORMS.WEB;
     }
 
-    if ([PLATFORMS.ANDROID, PLATFORMS.IOS, PLATFORMS.WEB, PLATFORMS.WINDOWS, PLATFORMS.TESTS, PLATFORMS.MACOS].indexOf(targetPlatform) < 0) {
+    if (
+        [
+            PLATFORMS.ANDROID,
+            PLATFORMS.IOS,
+            PLATFORMS.WEB,
+            PLATFORMS.WINDOWS,
+            PLATFORMS.TESTS,
+            PLATFORMS.MACOS
+        ].indexOf(targetPlatform) < 0
+    ) {
         throw 'Unsupported platform - ' + targetPlatform;
     }
 
@@ -74,10 +87,10 @@ function getPlatform() {
 var platform = getPlatform();
 gutil.log(gutil.colors.yellow('platform: ' + platform));
 
-var isDevEnv = (process.env.NODE_ENV === 'development');
+var isDevEnv = process.env.NODE_ENV === 'development';
 gutil.log(gutil.colors.yellow('developer mode: ' + (isDevEnv ? 'enabled' : 'disabled')));
 
-var enableSrcMaps = (argv.usesourcemaps !== 'no');
+var enableSrcMaps = argv.usesourcemaps !== 'no';
 gutil.log(gutil.colors.yellow('source maps: ' + enableSrcMaps));
 
 // Compute the build config
@@ -89,18 +102,24 @@ var handleError = function(err) {
 
     beepOnce();
     notifyOnce({
-      'title': 'Gulp Error',
-      'message': err.toString()
+        title: 'Gulp Error',
+        message: err.toString()
     });
 };
 
 // Produce a beep only once, even if called several times.
-var beepOnce = _.throttle(function() {
-    gutil.beep();
-}, 3000, { trailing: false });
+var beepOnce = _.throttle(
+    function() {
+        gutil.beep();
+    },
+    3000,
+    { trailing: false }
+);
 
 // Produce a notification only once, even if called several times.
-var notifyOnce = _.throttle(notifier.notify.bind(notifier), 3000, { trailing: false });
+var notifyOnce = _.throttle(notifier.notify.bind(notifier), 3000, {
+    trailing: false
+});
 
 // Fix for "EventEmitter memory leak detected" errors. These aren't memory
 // leaks -- we're just running a lot of concurrent tasks and runSequence
@@ -115,18 +134,20 @@ gulp.src = function() {
 
 function fixPipe(stream) {
     var origPipe = stream.pipe;
-    stream.pipe = function (dest) {
-        arguments[0] = dest.on('error', function (error) { // jshint ignore:line
+    stream.pipe = function(dest) {
+        var args = arguments;
+        args[0] = dest.on('error', function(error) {
+            // jshint ignore:line
             var nextStreams = dest._nextStreams;
             if (nextStreams) {
-                nextStreams.forEach(function (nextStream) {
+                nextStreams.forEach(function(nextStream) {
                     nextStream.emit('error', error);
                 });
             } else if (dest.listeners('error').length === 1) {
                 throw error;
             }
         });
-        var nextStream = fixPipe(origPipe.apply(this, arguments));
+        var nextStream = fixPipe(origPipe.apply(this, args));
         (this._nextStreams || (this._nextStreams = [])).push(nextStream);
         return nextStream;
     };
@@ -151,15 +172,15 @@ var getFilePathsFromConfig = _.memoize(function(configEntry) {
 });
 
 function usesWebpack() {
-    return (platform === PLATFORMS.WEB || platform === PLATFORMS.TESTS);
+    return platform === PLATFORMS.WEB || platform === PLATFORMS.TESTS;
 }
 
 function getPlatformSpecificResources() {
     var configKey = {
-        'ios': 'iOS',
-        'android': 'android',
-        'windows': 'windows',
-        'macos':'macos'
+        ios: 'iOS',
+        android: 'android',
+        windows: 'windows',
+        macos: 'macos'
     }[platform];
 
     return config[configKey] || {};
@@ -205,30 +226,37 @@ function _runTsLintInternal(src, cacheName, fakeTaskName) {
     // Setup for fake gulp.task.
     var start = process.hrtime();
     if (fakeTaskName) {
-        gutil.log('Starting \'' + gutil.colors.cyan(fakeTaskName) + '\'...');
+        gutil.log("Starting '" + gutil.colors.cyan(fakeTaskName) + "'...");
     }
 
     // Run tslint.
-    var stream = gulp.src(src, { base: './' }) // specify base to preserve folder structure
-        .pipe(cached(cacheName, {optimizeMemory: true}))
-        .pipe(tslint({
-            tslint: tslintEng,
-            reporter: 'verbose',
-            formatter: createCacheInvalidator(cacheName),
-            fix: !!argv.fix
-        }))
-        .pipe(tslint.report({
-            // Break non-dev builds on lint
-            emitError: !isDevEnv
-        }))
+    var stream = gulp
+        .src(src, { base: './' }) // specify base to preserve folder structure
+        .pipe(cached(cacheName, { optimizeMemory: true }))
+        .pipe(
+            tslint({
+                tslint: tslintEng,
+                reporter: 'verbose',
+                formatter: createCacheInvalidator(cacheName),
+                fix: !!argv.fix
+            })
+        )
+        .pipe(
+            tslint.report({
+                // Break non-dev builds on lint
+                emitError: !isDevEnv
+            })
+        )
         .on('error', handleError);
 
     // Print duration for the fake gulp.task.
     if (fakeTaskName) {
-        stream = stream.on('end', function () {
+        stream = stream.on('end', function() {
             var time = process.hrtime(start);
-            gutil.log('Finished \'' + gutil.colors.cyan(fakeTaskName) + '\' after ',
-                gutil.colors.magenta(prettyTime(time)));
+            gutil.log(
+                "Finished '" + gutil.colors.cyan(fakeTaskName) + "' after ",
+                gutil.colors.magenta(prettyTime(time))
+            );
         });
     }
 
@@ -242,9 +270,13 @@ function _runTsLintInternal(src, cacheName, fakeTaskName) {
 
 // Debounce running ts-lint. We don't need to call it once per change since it runs over all changed files.
 function _debounceTsLintRunner(runner, fakeTaskName) {
-    return _.debounce(function () {
-        runner(fakeTaskName);
-    }, 100, { leading: true, trailing: true });
+    return _.debounce(
+        function() {
+            runner(fakeTaskName);
+        },
+        100,
+        { leading: true, trailing: true }
+    );
 }
 
 function runTsLint(fakeTaskName) {
@@ -257,30 +289,40 @@ var runTsLintFromWatcher = _debounceTsLintRunner(runTsLint, 'tsLint');
 function copyMultiple(copyList, callback) {
     // Iterate over each entry in the copy list. Each has a src
     // and dest (or possibly multiple of each).
-    async.eachSeries(copyList, function(copyOrder, asyncCallback) {
-        if (!copyOrder){
-            return;
-        }
-        var dests = (_.isArray(copyOrder.dest) ? copyOrder.dest : [copyOrder.dest]);
-        async.each(dests, function(dest, innerCallback) {
-            gulp.src(copyOrder.src, copyOrder.options)
-                .pipe(rename(function (path) {
-                    if (copyOrder.renameTo) {
-                        path.basename = copyOrder.renameTo;
-                    }
-                }))
-                .pipe(gulp.dest(dest))
-                .on('end', innerCallback)
-                .on('error', innerCallback);
-        }, asyncCallback);
-    }, callback);
+    async.eachSeries(
+        copyList,
+        function(copyOrder, asyncCallback) {
+            if (!copyOrder) {
+                return;
+            }
+            var dests = _.isArray(copyOrder.dest) ? copyOrder.dest : [copyOrder.dest];
+            async.each(
+                dests,
+                function(dest, innerCallback) {
+                    gulp.src(copyOrder.src, copyOrder.options)
+                        .pipe(
+                            rename(function(path) {
+                                if (copyOrder.renameTo) {
+                                    path.basename = copyOrder.renameTo;
+                                }
+                            })
+                        )
+                        .pipe(gulp.dest(dest))
+                        .on('end', innerCallback)
+                        .on('error', innerCallback);
+                },
+                asyncCallback
+            );
+        },
+        callback
+    );
 }
 
 // helper for creating paths that require accepts
 function normalizePath(mypath) {
     return mypath
         .replace(/^(?!\.(?:\/|\\))/, './') // add ./ at beginning if not present
-        .replace(/\\/g, '/');              // change path separators
+        .replace(/\\/g, '/'); // change path separators
 }
 
 // Search for absolute require paths that correspond to specified aliases and
@@ -293,21 +335,23 @@ function aliasify(aliases) {
         if (!file.isNull()) {
             var fileContent = file.contents.toString();
             if (reqPattern.test(fileContent)) {
-                file.contents = new Buffer(fileContent.replace(reqPattern, function(req, oldPath) {
-                    if (!aliases[oldPath]) {
-                        return req;
-                    }
+                file.contents = new Buffer(
+                    fileContent.replace(reqPattern, function(req, oldPath) {
+                        if (!aliases[oldPath]) {
+                            return req;
+                        }
 
-                    if (aliases[oldPath][0] === '.') {
-                        var oldFolder = path.dirname(path.resolve(file.path));
-                        var targetFile = path.resolve(aliases[oldPath]);
-                        var newPath = path.relative(oldFolder, targetFile);
+                        if (aliases[oldPath][0] === '.') {
+                            var oldFolder = path.dirname(path.resolve(file.path));
+                            var targetFile = path.resolve(aliases[oldPath]);
+                            var newPath = path.relative(oldFolder, targetFile);
 
-                        return "require('" + normalizePath(newPath) + "')";
-                    } else {
-                        return "require('" + aliases[oldPath] + "')";
-                    }
-                }));
+                            return "require('" + normalizePath(newPath) + "')";
+                        } else {
+                            return "require('" + aliases[oldPath] + "')";
+                        }
+                    })
+                );
             }
         }
 
@@ -332,7 +376,7 @@ function replaceFlags(stream) {
 
 function fixRelativePathGlob(pathOrGlob) {
     if (_.isArray(pathOrGlob)) {
-        return _.map(pathOrGlob, function (part) {
+        return _.map(pathOrGlob, function(part) {
             return fixRelativePathGlob(part);
         });
     }
@@ -366,7 +410,11 @@ gulp.task('watch', function() {
             return;
         }
 
-        console.log(gutil.colors.bgRed.bold('\nThe following files were modified, and you likely need to update and re-run gulp:'));
+        console.log(
+            gutil.colors.bgRed.bold(
+                '\nThe following files were modified, and you likely need to update and re-run gulp:'
+            )
+        );
 
         console.log(gutil.colors.bgRed.bold('- ' + path.relative('./', file.path)));
 
@@ -375,8 +423,9 @@ gulp.task('watch', function() {
 
             beepOnce();
             notifier.notify({
-                'title': 'Project Changes',
-                'message': 'Gulp infrastructure files were modified, and you likely need to update and re-run gulp.'
+                title: 'Project Changes',
+                message:
+                    'Gulp infrastructure files were modified, and you likely need to update and re-run gulp.'
             });
         }, 500);
     });
@@ -422,19 +471,21 @@ gulp.task('ts-lint', function() {
 });
 
 gulp.task('gulpfile-lint', function() {
-    return gulp.src(config.infrastructure.gulpfile)
+    return gulp
+        .src(config.infrastructure.gulpfile)
         .pipe(jshint())
         .pipe(jshint.reporter(stylish))
         .on('error', handleError);
 });
 
-gulp.task('compile-rn', function () {
+gulp.task('compile-rn', function() {
     if (platform === PLATFORMS.WEB || platform === PLATFORMS.TESTS) {
         return;
     }
 
     var rnSource = config.ts.src.concat(config.ts.definitions);
-    var stream = gulp.src(rnSource)
+    var stream = gulp
+        .src(rnSource)
         .pipe(cached('typescript'))
         .pipe(eol(os.EOL, false))
         .pipe(enableSrcMaps ? sourcemaps.init() : gutil.noop())
@@ -442,33 +493,32 @@ gulp.task('compile-rn', function () {
 
     var shouldAssert = isDevEnv || (!isCandidateBuild && !isPublicRelease && !isInsidersRelease);
     if (!shouldAssert) {
-        stream = stream
-            .pipe(unassert());
+        stream = stream.pipe(unassert());
     }
 
     // must run after unassert
     if (enableSrcMaps) {
-        stream = stream.pipe(sourcemaps.write('.',
-            { sourceRoot: path.join(process.cwd(), config.ts.srcRoot) }));
+        stream = stream.pipe(
+            sourcemaps.write('.', {
+                sourceRoot: path.join(process.cwd(), config.ts.srcRoot)
+            })
+        );
     }
 
-    return stream
-        .pipe(gulp.dest(config.ts.obj))
-        .on('error', handleError);
+    return stream.pipe(gulp.dest(config.ts.obj)).on('error', handleError);
 });
 
 gulp.task('apply-aliases', function() {
     var aliases = _.assign({}, config.bundling.aliases, getPlatformSpecificResources().aliases);
-    var stream = gulp.src(path.join(config.ts.obj, '**/*.{js,js.map}'))
-        .pipe(cached('aliases', {optimizeMemory: true}))
+    var stream = gulp
+        .src(path.join(config.ts.obj, '**/*.{js,js.map}'))
+        .pipe(cached('aliases', { optimizeMemory: true }))
         .pipe(aliasify(aliases));
 
     // Replace flags in source since RN Packager won't do it for us
     stream = replaceFlags(stream);
 
-    return stream
-        .pipe(gulp.dest(config.ts.RNDest))
-        .on('error', handleError);
+    return stream.pipe(gulp.dest(config.ts.RNDest)).on('error', handleError);
 });
 
 gulp.task('copy', function(callback) {
@@ -479,15 +529,48 @@ gulp.task('lint', function(callback) {
     runSequence(['ts-lint', 'gulpfile-lint'], callback);
 });
 
+gulp.task('prettier', function() {
+    gulp.src(['./src/**/*.{js,ts,tsx}', './*.{js,ts,tsx}'])
+        .pipe(prettier(require('./.prettierrc')))
+        // passing a function that returns base will write the files in-place
+        .pipe(
+            gulp.dest(function(file) {
+                return file.base;
+            })
+        );
+});
+
 gulp.task('build', function(callback) {
     runSequence(['copy', 'compile-rn'], callback);
 });
 
-gulp.task('webpack-js', shell.task('node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --bail --hide-modules', { env: webpackEnv }));
-gulp.task('webpack-js-watch', shell.task('node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --watch --hide-modules', { env: webpackEnv }));
+gulp.task(
+    'webpack-js',
+    shell.task(
+        'node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --bail --hide-modules',
+        { env: webpackEnv }
+    )
+);
 
-gulp.task('run-once', function (callback) {
-    runSequence('clean', 'lint', 'copy', 'build', 'apply-aliases', usesWebpack() ? 'webpack-js' : 'noop', callback);
+gulp.task(
+    'webpack-js-watch',
+    shell.task(
+        'node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --watch --hide-modules',
+        { env: webpackEnv }
+    )
+);
+
+gulp.task('run-once', function(callback) {
+    runSequence(
+        'clean',
+        'prettier',
+        'lint',
+        'copy',
+        'build',
+        'apply-aliases',
+        usesWebpack() ? 'webpack-js' : 'noop',
+        callback
+    );
 });
 
 gulp.task('noop', function() {
@@ -495,5 +578,5 @@ gulp.task('noop', function() {
 });
 
 gulp.task('run', function(callback) {
-    runSequence('clean', 'copy', 'build', 'apply-aliases', 'watch', 'lint', callback);
+    runSequence('clean', 'copy', 'build', 'apply-aliases', 'watch', 'prettier', 'lint', callback);
 });

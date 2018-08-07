@@ -1,10 +1,10 @@
-﻿/**
-* ToggleSwitch.tsx
-* Copyright: Microsoft 2017
-*
-* A simple toggle control built in ReactXP that allows users to
-* pick between two values.
-*/
+/**
+ * ToggleSwitch.tsx
+ * Copyright: Microsoft 2017
+ *
+ * A simple toggle control built in ReactXP that allows users to
+ * pick between two values.
+ */
 
 import RX = require('reactxp');
 
@@ -59,7 +59,9 @@ class ToggleSwitch extends RX.Component<ToggleSwitchProps, null> {
 
         // This value controls the left offset of the knob, which we will
         // animate when the user toggles the control.
-        this._knobLeftAnimationValue = RX.Animated.createValue(this.props.value ? _knobLeftOn : _knobLeftOff);
+        this._knobLeftAnimationValue = RX.Animated.createValue(
+            this.props.value ? _knobLeftOn : _knobLeftOff
+        );
         this._knobLeftAnimationStyle = RX.Styles.createAnimatedViewStyle({
             left: this._knobLeftAnimationValue
         });
@@ -68,13 +70,15 @@ class ToggleSwitch extends RX.Component<ToggleSwitchProps, null> {
         // use of the interpolate method to smoothly transition between two colors.
         this._toggleColorAnimationValue = RX.Animated.createValue(this.props.value ? 1 : 0);
         this._toggleColorAnimationStyle = RX.Styles.createAnimatedTextInputStyle({
-            backgroundColor: RX.Animated.interpolate(this._toggleColorAnimationValue,
-                [0, 1], ['#66f', '#ddd'])
+            backgroundColor: RX.Animated.interpolate(
+                this._toggleColorAnimationValue,
+                [0, 1],
+                ['#66f', '#ddd']
+            )
         });
     }
 
     componentDidUpdate(oldProps: ToggleSwitchProps) {
-
         // If the value of the toggle changes, animate the toggle sliding
         // from one side to the other. In parallel, animate the opacity change.
         if (oldProps.value !== this.props.value) {
@@ -89,8 +93,7 @@ class ToggleSwitch extends RX.Component<ToggleSwitchProps, null> {
                     duration: _animationDuration,
                     easing: RX.Animated.Easing.InOut()
                 })
-            ])
-            .start();
+            ]).start();
         }
     }
 
@@ -99,12 +102,12 @@ class ToggleSwitch extends RX.Component<ToggleSwitchProps, null> {
         const backgroundStyle = [_styles.toggleSwitchBackground, this._toggleColorAnimationStyle];
 
         return (
-            <RX.Button style={ _styles.container } onPress={ this._handleClick }>
-                <RX.View style={ _styles.toggleSwitch }>
-                    <RX.Animated.View style={ backgroundStyle }/>
-                    <RX.Animated.View style={ knobStyles }/>
+            <RX.Button style={_styles.container} onPress={this._handleClick}>
+                <RX.View style={_styles.toggleSwitch}>
+                    <RX.Animated.View style={backgroundStyle} />
+                    <RX.Animated.View style={knobStyles} />
                 </RX.View>
-             </RX.Button>
+            </RX.Button>
         );
     }
 
@@ -114,7 +117,7 @@ class ToggleSwitch extends RX.Component<ToggleSwitchProps, null> {
         if (this.props.onChange) {
             this.props.onChange(!this.props.value);
         }
-    }
+    };
 }
 
 export default ToggleSwitch;

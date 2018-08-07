@@ -41,30 +41,29 @@ class CameraView extends RX.Component<MainPanelProps, null> {
     private camera: any;
     render() {
         return (
-            <RX.View style={ styles.container }>
-                <RX.View style={ styles.camera }>
-                    <Camera
-                        ref={(ref: any) => this.camera = ref}
-                    />
+            <RX.View style={styles.container}>
+                <RX.View style={styles.camera}>
+                    <Camera ref={(ref: any) => (this.camera = ref)} />
                 </RX.View>
-                <RX.View style={ styles.buttons }>
-                    <RX.Button style={ styles.roundButton } onPress={ this._onPressNavigate }/>
+                <RX.View style={styles.buttons}>
+                    <RX.Button style={styles.roundButton} onPress={this._onPressNavigate} />
                 </RX.View>
             </RX.View>
         );
     }
-    
+
     private _onPressNavigate = () => {
         if (this.camera) {
             console.log('takePicAsync', this.camera.takePicAsync);
-            this.camera.takePicAsync()
+            this.camera
+                .takePicAsync()
                 .then((base64: string) => {
                     console.log('BASE64', base64);
                     this.props.onPressNavigate(base64);
                 })
                 .catch(console.log);
         }
-    }
+    };
 }
 
 export = CameraView;

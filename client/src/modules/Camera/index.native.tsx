@@ -1,4 +1,4 @@
-﻿import RX = require('reactxp');
+import RX = require('reactxp');
 import { RNCamera } from 'react-native-camera';
 import { StyleSheet } from 'react-native';
 
@@ -9,12 +9,13 @@ class Camera extends RX.Component<CameraProps, null> {
 
     public takePicAsync: () => Promise<string> = () => {
         return new Promise((resolve, reject) => {
-            this.camera.takePictureAsync({ quality: 0.5, base64: true })
+            this.camera
+                .takePictureAsync({ quality: 0.5, base64: true })
                 .then((result: any) => {
                     resolve(result.base64);
                 })
                 .catch(reject);
-        })
+        });
     };
 
     render() {
@@ -25,7 +26,7 @@ class Camera extends RX.Component<CameraProps, null> {
         });
         return (
             <RNCamera
-                ref={(ref: any) => this.camera = ref}
+                ref={(ref: any) => (this.camera = ref)}
                 style={styles.camera}
                 type={RNCamera.Constants.Type.back}
                 permissionDialogTitle={'Permission to use camera'}

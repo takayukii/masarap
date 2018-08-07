@@ -3,7 +3,7 @@ export default {
         backgroundColor: 'white'
     },
     header: {
-      height: 50,
+        height: 50
     },
     snapButton: {
         height: 64,

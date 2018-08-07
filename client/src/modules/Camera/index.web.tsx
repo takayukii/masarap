@@ -1,7 +1,6 @@
-﻿import RX = require('reactxp');
+import RX = require('reactxp');
 
-interface CameraProps extends RX.CommonProps {
-}
+interface CameraProps extends RX.CommonProps {}
 
 class Camera extends RX.Component<CameraProps, null> {
     private video: HTMLVideoElement;
@@ -16,7 +15,10 @@ class Camera extends RX.Component<CameraProps, null> {
 
     componentDidMount() {
         this.video = document.querySelector('video');
-        window.navigator.mediaDevices.getUserMedia(this.constraints).then(this.handleSuccess).catch(this.handleError);
+        window.navigator.mediaDevices
+            .getUserMedia(this.constraints)
+            .then(this.handleSuccess)
+            .catch(this.handleError);
     }
 
     handleSuccess = (stream: MediaStream) => {
@@ -35,11 +37,10 @@ class Camera extends RX.Component<CameraProps, null> {
                 const canvas = document.createElement('canvas');
                 canvas.width = this.video.videoWidth;
                 canvas.height = this.video.videoHeight;
-                canvas.getContext('2d').
-                drawImage(this.video, 0, 0, canvas.width, canvas.height);
-                const jpegUrl = canvas.toDataURL("image/jpeg");
+                canvas.getContext('2d').drawImage(this.video, 0, 0, canvas.width, canvas.height);
+                const jpegUrl = canvas.toDataURL('image/jpeg');
                 resolve(jpegUrl);
-            } catch(error) {
+            } catch (error) {
                 reject(error);
             }
         });
@@ -48,7 +49,7 @@ class Camera extends RX.Component<CameraProps, null> {
     render() {
         return (
             <video
-                ref='video'
+                ref="video"
                 style={{
                     display: 'flex',
                     position: 'absolute',

@@ -1,9 +1,9 @@
 /**
-* buildconfig.js
-* Copyright: Microsoft 2018
-*
-* Configuration parameters for building the app.
-*/
+ * buildconfig.js
+ * Copyright: Microsoft 2018
+ *
+ * Configuration parameters for building the app.
+ */
 
 'use strict';
 
@@ -17,9 +17,9 @@ var isDevEnv = false;
 // Base paths to specific folders
 var basePaths = {
     nodeModulesPath: './node_modules',
-    sourcePath : './src/',
+    sourcePath: './src/',
     tempPath: './temp/',
-    webAppPath : './web/'
+    webAppPath: './web/'
 };
 
 function getTempPath(mypath) {
@@ -94,11 +94,11 @@ function getModuleAliases(targetPlatform) {
 
     var modules = fs.readdirSync('./src/modules/');
 
-    _.each(modules, function (moduleName) {
+    _.each(modules, function(moduleName) {
         var fileNameSearchOrder = [];
         var moduleVariant = 'index.' + targetPlatform;
 
-        _.each(fallbackSearchOrder, function (fallback) {
+        _.each(fallbackSearchOrder, function(fallback) {
             var variantPath = './src/modules/' + moduleName + '/' + moduleVariant;
             if (fs.existsSync(variantPath + '.ts') || fs.existsSync(variantPath + '.tsx')) {
                 return true;
@@ -106,8 +106,10 @@ function getModuleAliases(targetPlatform) {
             moduleVariant = fallback;
         });
 
-        var modulePath = (targetPlatform === 'web' || targetPlatform === 'tests' || targetPlatform === 'electron') ?
-            getSourcePath('modules') : './' + getObjPath('modules');
+        var modulePath =
+            targetPlatform === 'web' || targetPlatform === 'tests' || targetPlatform === 'electron'
+                ? getSourcePath('modules')
+                : './' + getObjPath('modules');
         aliases['modules/' + moduleName] = modulePath + '/' + moduleName + '/' + moduleVariant;
     });
 
@@ -120,11 +122,7 @@ function getConfigInternal() {
         // --------------------------------------------------------------------- //
         clean: {
             temp: getTempPath('*'),
-            web: [
-                getBuildPath('fonts/'),
-                getBuildPath('images/'),
-                getBuildPath('js/')
-            ],
+            web: [getBuildPath('fonts/'), getBuildPath('images/'), getBuildPath('js/')],
             tests: getTempPath('tests/'),
             rnApp: getBuildPath('*')
         },
@@ -153,12 +151,7 @@ function getConfigInternal() {
         // Build infrastructure
         // --------------------------------------------------------------------- //
         infrastructure: {
-            files: [
-                './gulpfile.js',
-                './buildconfig.js',
-                './package.json',
-                './webpack.config.js'
-            ],
+            files: ['./gulpfile.js', './buildconfig.js', './package.json', './webpack.config.js'],
             gulpfile: './gulpfile.js'
         },
 
@@ -174,11 +167,11 @@ function getConfigInternal() {
             config: './tsconfig.json',
             RNDest: getBuildPath('js')
         }
-    }
+    };
 }
 
 module.exports = function getConfig(newTargetPlatform, isDev) {
     setTargetPlatform(newTargetPlatform);
     setIsDevEnv(isDev);
     return getConfigInternal();
-}
+};

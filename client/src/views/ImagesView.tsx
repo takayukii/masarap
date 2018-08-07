@@ -45,8 +45,8 @@ const styles = {
         paddingHorizontal: 10
     }),
     listItemImage: RX.Styles.createImageStyle({
-        width: (width / 2) - (10 * 2),
-        height: (width / 2) - (10 * 2),
+        width: width / 2 - 10 * 2,
+        height: width / 2 - 10 * 2
     }),
     listItemText: RX.Styles.createTextStyle({
         marginTop: 5,
@@ -63,17 +63,18 @@ const styles = {
 
 class ImagesView extends RX.Component<ImagesViewProps> {
     renderList() {
-        const list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+        const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
         const random = Math.floor(Math.random() * list.length);
         list.splice(random, list.length - random);
         if (list.length > 0) {
             return list.map(num => (
                 <RX.View key={num} style={styles.listItem}>
-                    <RX.Button >
-                        <RX.Image style={styles.listItemImage} source={'https://placekitten.com/g/300/300'} />
-                        <RX.Text style={ styles.listItemText }>
-                            {num}
-                        </RX.Text>
+                    <RX.Button>
+                        <RX.Image
+                            style={styles.listItemImage}
+                            source={'https://placekitten.com/g/300/300'}
+                        />
+                        <RX.Text style={styles.listItemText}>{num}</RX.Text>
                     </RX.Button>
                 </RX.View>
             ));
@@ -87,15 +88,13 @@ class ImagesView extends RX.Component<ImagesViewProps> {
 
     render() {
         return (
-            <RX.View useSafeInsets={ true } style={ styles.container }>
+            <RX.View useSafeInsets={true} style={styles.container}>
                 <RX.View style={styles.header}>
                     <BackButton onPress={this._onPressBack} />
                     <SearchBox />
                 </RX.View>
-                <RX.ScrollView style={ styles.scroll }>
-                    <RX.View style={ styles.listItems }>
-                        {this.renderList()}
-                    </RX.View>
+                <RX.ScrollView style={styles.scroll}>
+                    <RX.View style={styles.listItems}>{this.renderList()}</RX.View>
                 </RX.ScrollView>
             </RX.View>
         );
@@ -103,8 +102,7 @@ class ImagesView extends RX.Component<ImagesViewProps> {
 
     private _onPressBack = () => {
         this.props.onNavigateBack();
-    }
-
+    };
 }
 
 export = ImagesView;
