@@ -17,6 +17,8 @@ sdk.dir=/Users/takayukii/Library/Android/sdk
 
 ### Run
 
+#### Simulators
+
 To run app on iOS simulator, just hit a following command.
 
 ```
@@ -28,6 +30,21 @@ To run app on Android Simulator, ensure run Android simulator in advance and hit
 ```
 $ yarn android
 ```
+
+#### iOS Device
+
+To run the app on iOS device, you have to use XCode.
+
+Use Apple ID witch has not connected to Apple Developer Account (Preferences > Accounts). Specified it to both Targets (e.g. RXPHelloWorld, RXPHelloWorldTests).
+
+Also, you may need to modify Bundle Identifier like e.g. `org.reactjs.native.example.RXPHelloWorld.xxxxx` and node path in `Bundle React Native code and images` in `Build Phases`.
+
+Following is node path example.
+
+```
+export NODE_BINARY=/Users/takayukii/.anyenv/envs/ndenv/shims/node
+../node_modules/react-native/scripts/react-native-xcode.sh
+``` 
 
 ### RN modules
 
