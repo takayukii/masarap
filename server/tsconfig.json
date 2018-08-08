@@ -1,0 +1,21 @@
+{
+  "exclude": [
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "declaration": false,
+    "noResolve": false,
+    "module": "commonjs",
+    "target": "es6",
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "outDir": "./dist/"
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}

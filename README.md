@@ -4,6 +4,7 @@
 
 ### Prerequisites
 
+* Node.js
 * XCode
 * Android Studio
 * JDK 8
@@ -65,3 +66,17 @@ It required some entries on info.plist
 It required hectic gradle modifications
 
 [https://github.com/react-native-community/react-native-camera/issues/1490](https://github.com/react-native-community/react-native-camera/issues/1490)
+
+## server
+
+### Prerequisites
+
+* Node.js
+
+### Run
+
+```
+$ yarn watch
+```
+
+Open `http://localhost:4000` by your favorite browser.

@@ -1,7 +1,12 @@
-.vs/
-.idea/
-bower_components/
-node_modules/
+.vs
+.vscode
+.idea
+bower_components
+node_modules
 
 *.map
+dist
+temp
+bundle.js
 ts.js
+yarn-error.log
