@@ -7,9 +7,9 @@ class Camera extends RX.Component<CameraProps, null> {
     private constraints = {
         audio: false,
         video: {
-            // facingMode: {
-            //     exact: "environment"
-            // }
+            facingMode: {
+                exact: 'environment'
+            }
         }
     };
 

@@ -9,9 +9,10 @@
     "android": "node node_modules/react-native/local-cli/cli.js run-android",
     "ios": "node node_modules/react-native/local-cli/cli.js run-ios",
     "lint": "node node_modules/gulp/bin/gulp lint --fix",
-    "watch-web": "cross-env NODE_ENV=development node node_modules/gulp/bin/gulp run --platform=web",
-    "watch-ios": "cross-env NODE_ENV=development node node_modules/gulp/bin/gulp run --platform=ios",
-    "watch-android": "cross-env NODE_ENV=development node node_modules/gulp/bin/gulp run --platform=android"
+    "watch-web": "cross-env NODE_ENV=development gulp run --platform=web",
+    "watch-ios": "cross-env NODE_ENV=development gulp run --platform=ios",
+    "watch-android": "cross-env NODE_ENV=development gulp run --platform=android",
+    "deploy-web": "gulp run-once --platform=web && aws s3 cp ./web/ s3://masarap/ --acl public-read --recursive"
   },
   "devDependencies": {
     "@types/webpack": "^4.4.0",
