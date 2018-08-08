@@ -25,6 +25,7 @@ enum NavigationRouteId {
 
 interface AppState {
     dataUrl: string;
+    keyword: string;
 }
 
 class App extends RX.Component<{}, AppState> {
@@ -33,7 +34,8 @@ class App extends RX.Component<{}, AppState> {
     constructor(props: {}) {
         super(props);
         this.state = {
-            dataUrl: ''
+            dataUrl: '',
+            keyword: ''
         };
     }
 
@@ -77,7 +79,12 @@ class App extends RX.Component<{}, AppState> {
                 );
 
             case NavigationRouteId.ThirdPanel:
-                return <ImagesView onNavigateBack={this._onPressBack} />;
+                return (
+                    <ImagesView
+                        keyword={this.state.keyword}
+                        onNavigateBack={this._onPressBack}
+                    />
+                );
         }
 
         return null;
@@ -93,13 +100,14 @@ class App extends RX.Component<{}, AppState> {
         });
     };
 
-    private _onPressNavigateToThird = () => {
-        setTimeout(() => {
-            this._navigator.push({
-                routeId: NavigationRouteId.ThirdPanel,
-                sceneConfigType: Types.NavigatorSceneConfigType.Fade
-            });
-        }, 1000);
+    private _onPressNavigateToThird = (keyword: string) => {
+        this.setState({
+            keyword
+        });
+        this._navigator.push({
+            routeId: NavigationRouteId.ThirdPanel,
+            sceneConfigType: Types.NavigatorSceneConfigType.Fade
+        });
     };
 
     private _onPressBack = () => {

@@ -10,3 +10,4 @@ temp
 bundle.js
 ts.js
 yarn-error.log
+.env

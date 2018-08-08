@@ -73,6 +73,8 @@ It required hectic gradle modifications
 
 * Node.js
 
+Save keyfile.json and .env. Necessary information should be available on GCP.
+
 ### Run
 
 ```

@@ -7,11 +7,11 @@ import RX = require('reactxp');
 
 import theme from '../styles/theme';
 
-const { height } = RX.UserInterface.measureWindow();
-
 interface MainPanelProps {
-    onPressNavigate: (message?: string) => void;
+    onPressNavigate: (dataUrl: string) => void;
 }
+
+const { height } = RX.UserInterface.measureWindow();
 
 const styles = {
     container: RX.Styles.createViewStyle({

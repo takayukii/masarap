@@ -13,7 +13,7 @@ import theme from '../styles/theme';
 
 interface KeywordsViewProps {
     dataUrl: string;
-    onPressNavigate: () => void;
+    onPressNavigate: (keyword: string) => void;
     onNavigateBack: () => void;
 }
 
@@ -66,7 +66,7 @@ class KeywordsView extends RX.Component<KeywordsViewProps> {
         if (data.words.length > 0) {
             return data.words.map(word => (
                 <RX.View key={word} style={styles.listItem}>
-                    <RX.Button onPress={this.props.onPressNavigate}>
+                    <RX.Button onPress={() => this.props.onPressNavigate(word)}>
                         <RX.Text style={styles.listItemText}>{word}</RX.Text>
                     </RX.Button>
                 </RX.View>

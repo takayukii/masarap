@@ -2,12 +2,31 @@
 * This file demonstrates a basic ReactXP app.
 */
 
+import { gql } from 'apollo-boost';
+import { Query } from 'react-apollo';
 import RX = require('reactxp');
 
 import BackButton from '../modules/BackButton';
 import SearchBox from '../modules/SearchBox';
 
 import theme from '../styles/theme';
+import Loading from "../modules/Loading";
+
+interface ImagesViewProps {
+    keyword: string,
+    onNavigateBack: () => void;
+}
+
+const SEARCH = gql`
+    query search($keyword: String!) {
+        results: searchImages(keyword: $keyword)  {
+            title
+            link
+            imageLink
+            thumbnailImageLink
+        }
+    }
+`;
 
 const { width, height } = RX.UserInterface.measureWindow();
 
@@ -57,25 +76,24 @@ const styles = {
     })
 };
 
-interface ImagesViewProps {
-    onNavigateBack: () => void;
-}
+type SearchImageResult = {
+    title: string,
+    link: string,
+    imageLink: string,
+    thumbnailImageLink: string
+};
 
 class ImagesView extends RX.Component<ImagesViewProps> {
-    renderList() {
-        const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-        // tslint:disable-next-line:insecure-random
-        const random = Math.floor(Math.random() * list.length);
-        list.splice(random, list.length - random);
-        if (list.length > 0) {
-            return list.map(num => (
-                <RX.View key={num} style={styles.listItem}>
+    renderList(data: { results: Array<SearchImageResult> }) {
+        if (data.results.length > 0) {
+            return data.results.map(result => (
+                <RX.View key={result.imageLink} style={styles.listItem}>
                     <RX.Button>
                         <RX.Image
                             style={styles.listItemImage}
-                            source={'https://placekitten.com/g/300/300'}
+                            source={result.thumbnailImageLink}
                         />
-                        <RX.Text style={styles.listItemText}>{num}</RX.Text>
+                        <RX.Text style={styles.listItemText}>{result.title}</RX.Text>
                     </RX.Button>
                 </RX.View>
             ));
@@ -88,16 +106,27 @@ class ImagesView extends RX.Component<ImagesViewProps> {
     }
 
     render() {
+        const { keyword } = this.props;
         return (
-            <RX.View useSafeInsets={true} style={styles.container}>
-                <RX.View style={styles.header}>
-                    <BackButton onPress={this._onPressBack} />
-                    <SearchBox />
-                </RX.View>
-                <RX.ScrollView style={styles.scroll}>
-                    <RX.View style={styles.listItems}>{this.renderList()}</RX.View>
-                </RX.ScrollView>
-            </RX.View>
+            <Query query={SEARCH} variables={{ keyword }}>
+                {({ loading, error, data }) => {
+                    return (
+                        <RX.View useSafeInsets={true} style={styles.container}>
+                            <RX.View style={styles.header}>
+                                <BackButton onPress={this._onPressBack} />
+                                <SearchBox keyword={this.props.keyword} />
+                            </RX.View>
+                            <RX.ScrollView style={styles.scroll}>
+                                {
+                                    loading || error ?
+                                    <Loading/> :
+                                    <RX.View style={styles.listItems}>{this.renderList(data)}</RX.View>
+                                }
+                            </RX.ScrollView>
+                        </RX.View>
+                    );
+                }}
+            </Query>
         );
     }
 
