@@ -9,12 +9,16 @@ import RX = require('reactxp');
 import BackButton from '../modules/BackButton';
 import SearchBox from '../modules/SearchBox';
 
+import Loading from '../modules/Loading';
 import theme from '../styles/theme';
-import Loading from "../modules/Loading";
 
 interface ImagesViewProps {
-    keyword: string,
+    keyword: string;
     onNavigateBack: () => void;
+}
+
+interface ImagesViewState {
+    keyword: string;
 }
 
 const SEARCH = gql`
@@ -83,7 +87,16 @@ type SearchImageResult = {
     thumbnailImageLink: string
 };
 
-class ImagesView extends RX.Component<ImagesViewProps> {
+class ImagesView extends RX.Component<ImagesViewProps, ImagesViewState> {
+    constructor(props: ImagesViewProps) {
+        super(props);
+        this.state = { keyword: props.keyword };
+    }
+
+    onSearch = (keyword: string) => {
+        this.setState({ keyword });
+    };
+
     renderList(data: { results: Array<SearchImageResult> }) {
         if (data.results.length > 0) {
             return data.results.map(result => (
@@ -106,15 +119,18 @@ class ImagesView extends RX.Component<ImagesViewProps> {
     }
 
     render() {
-        const { keyword } = this.props;
+        const { keyword } = this.state;
         return (
             <Query query={SEARCH} variables={{ keyword }}>
                 {({ loading, error, data }) => {
+                    if (loading || error) {
+                        return <Loading />;
+                    }
                     return (
                         <RX.View useSafeInsets={true} style={styles.container}>
                             <RX.View style={styles.header}>
                                 <BackButton onPress={this._onPressBack} />
-                                <SearchBox keyword={this.props.keyword} />
+                                <SearchBox keyword={keyword}  onSearch={this.onSearch} />
                             </RX.View>
                             <RX.ScrollView style={styles.scroll}>
                                 {

@@ -84,7 +84,6 @@ class KeywordsView extends RX.Component<KeywordsViewProps> {
         return (
           <Query query={DECODE} variables={{ dataUrl }}>
               {({ loading, error, data }) => {
-                  console.log('data', data);
                   if (loading || error) {
                       return <Loading />;
                   }
