@@ -2,15 +2,15 @@
 * This file demonstrates a basic ReactXP app.
 */
 // This example uses ExperimentalNavigation on iOS and Android
-import Navigator, {
-    Types,
-    NavigatorDelegateSelector as DelegateSelector
-} from 'reactxp-navigation';
 import RX = require('reactxp');
+import Navigator, {
+    NavigatorDelegateSelector as DelegateSelector,
+    Types
+} from 'reactxp-navigation';
 
 import CameraView = require('./views/CameraView');
-import KeywordsView = require('./views/KeywordsView');
 import ImagesView = require('./views/ImagesView');
+import KeywordsView = require('./views/KeywordsView');
 import Loading = require('./modules/Loading');
 
 enum NavigationRouteId {

@@ -2,9 +2,9 @@
 * This file demonstrates a basic ReactXP app.
 */
 
+import Camera from 'modules/Camera';
 import RX = require('reactxp');
 
-import Camera from 'modules/Camera';
 import theme from '../styles/theme';
 
 const { height } = RX.UserInterface.measureWindow();

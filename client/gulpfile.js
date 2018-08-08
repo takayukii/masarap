@@ -32,7 +32,6 @@ var tslint = require('gulp-tslint');
 var tslintEng = require('tslint');
 var util = require('util');
 var watch = require('gulp-watch');
-var prettier = require('gulp-prettier-plugin');
 
 var PLATFORMS = {
     WEB: 'web',
@@ -464,10 +463,7 @@ gulp.task('clean', function(callback) {
 });
 
 gulp.task('ts-lint', function() {
-    // Webpack runs tslint
-    if (!usesWebpack()) {
-        return runTsLint();
-    }
+    return runTsLint();
 });
 
 gulp.task('gulpfile-lint', function() {
@@ -529,17 +525,6 @@ gulp.task('lint', function(callback) {
     runSequence(['ts-lint', 'gulpfile-lint'], callback);
 });
 
-gulp.task('prettier', function() {
-    gulp.src(['./src/**/*.{js,ts,tsx}', './*.{js,ts,tsx}'])
-        .pipe(prettier(require('./.prettierrc')))
-        // passing a function that returns base will write the files in-place
-        .pipe(
-            gulp.dest(function(file) {
-                return file.base;
-            })
-        );
-});
-
 gulp.task('build', function(callback) {
     runSequence(['copy', 'compile-rn'], callback);
 });
@@ -563,7 +548,6 @@ gulp.task(
 gulp.task('run-once', function(callback) {
     runSequence(
         'clean',
-        'prettier',
         'lint',
         'copy',
         'build',
@@ -578,5 +562,5 @@ gulp.task('noop', function() {
 });
 
 gulp.task('run', function(callback) {
-    runSequence('clean', 'copy', 'build', 'apply-aliases', 'watch', 'prettier', 'lint', callback);
+    runSequence('clean', 'copy', 'build', 'apply-aliases', 'watch', 'lint', callback);
 });

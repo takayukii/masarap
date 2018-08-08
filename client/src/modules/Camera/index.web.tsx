@@ -49,7 +49,7 @@ class Camera extends RX.Component<CameraProps, null> {
     render() {
         return (
             <video
-                ref="video"
+                ref='video'
                 style={{
                     display: 'flex',
                     position: 'absolute',

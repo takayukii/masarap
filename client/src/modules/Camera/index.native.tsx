@@ -1,13 +1,13 @@
-import RX = require('reactxp');
-import { RNCamera } from 'react-native-camera';
 import { StyleSheet } from 'react-native';
+import { RNCamera } from 'react-native-camera';
+import RX = require('reactxp');
 
 interface CameraProps extends RX.CommonProps {}
 
 class Camera extends RX.Component<CameraProps, null> {
     private camera: any;
 
-    public takePicAsync: () => Promise<string> = () => {
+    takePicAsync: () => Promise<string> = () => {
         return new Promise((resolve, reject) => {
             this.camera
                 .takePictureAsync({ quality: 0.5, base64: true })

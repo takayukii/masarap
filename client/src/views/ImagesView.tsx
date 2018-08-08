@@ -64,6 +64,7 @@ const styles = {
 class ImagesView extends RX.Component<ImagesViewProps> {
     renderList() {
         const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+        // tslint:disable-next-line:insecure-random
         const random = Math.floor(Math.random() * list.length);
         list.splice(random, list.length - random);
         if (list.length > 0) {

@@ -1,6 +1,6 @@
 import RX = require('reactxp');
-import { SyntheticEvent } from 'reactxp/dist/common/Types';
 import { default as RXImageSvg, SvgPath as RXSvgPath, Types as SvgTypes } from 'reactxp-imagesvg';
+import { SyntheticEvent } from 'reactxp/dist/common/Types';
 
 import theme from '../styles/theme';
 
@@ -16,7 +16,7 @@ class BackButton extends RX.Component<BackButtonProps, RX.Stateless> {
         return (
             <RX.Button onPress={this.props.onPress}>
                 <RXImageSvg width={theme.header.height} height={theme.header.height}>
-                    <RXSvgPath fillColor="black" d={path} />
+                    <RXSvgPath fillColor='black' d={path} />
                 </RXImageSvg>
             </RX.Button>
         );
