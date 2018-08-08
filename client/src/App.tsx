@@ -15,7 +15,7 @@ import CameraView = require('./views/CameraView');
 import ImagesView = require('./views/ImagesView');
 import KeywordsView = require('./views/KeywordsView');
 
-const client = new ApolloClient({ uri: 'http://localhost:4000' });
+const client = new ApolloClient({ uri: 'https://fc4wys6td2.execute-api.us-east-1.amazonaws.com/dev/graphql' });
 
 enum NavigationRouteId {
     MainPanel,

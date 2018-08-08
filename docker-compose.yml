@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  serverless:
+    image: naughtldy/circleci-node-awscli
+    working_dir: /serverless
+    volumes:
+      - ./serverless:/serverless/
+      - ~/.aws/credentials:/home/circleci/.aws/credentials
