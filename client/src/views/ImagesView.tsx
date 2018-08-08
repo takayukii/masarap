@@ -87,6 +87,8 @@ type SearchImageResult = {
     thumbnailImageLink: string
 };
 
+let num = 0;
+
 class ImagesView extends RX.Component<ImagesViewProps, ImagesViewState> {
     constructor(props: ImagesViewProps) {
         super(props);
@@ -100,7 +102,7 @@ class ImagesView extends RX.Component<ImagesViewProps, ImagesViewState> {
     renderList(data: { results: Array<SearchImageResult> }) {
         if (data.results.length > 0) {
             return data.results.map(result => (
-                <RX.View key={result.imageLink} style={styles.listItem}>
+                <RX.View key={`${result.imageLink}-${num++}`} style={styles.listItem}>
                     <RX.Button>
                         <RX.Image
                             style={styles.listItemImage}

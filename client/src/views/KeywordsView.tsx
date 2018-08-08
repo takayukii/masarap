@@ -61,11 +61,13 @@ const styles = {
     })
 };
 
+let num = 0;
+
 class KeywordsView extends RX.Component<KeywordsViewProps> {
     renderList(data: {words: Array<string>}) {
         if (data.words.length > 0) {
             return data.words.map(word => (
-                <RX.View key={word} style={styles.listItem}>
+                <RX.View key={`${word}-${num++}`} style={styles.listItem}>
                     <RX.Button onPress={() => this.props.onPressNavigate(word)}>
                         <RX.Text style={styles.listItemText}>{word}</RX.Text>
                     </RX.Button>
