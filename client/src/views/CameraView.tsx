@@ -39,6 +39,7 @@ const styles = {
 
 class CameraView extends RX.Component<MainPanelProps, null> {
     private camera: any;
+
     render() {
         return (
             <RX.View style={styles.container}>
@@ -54,11 +55,9 @@ class CameraView extends RX.Component<MainPanelProps, null> {
 
     private _onPressNavigate = () => {
         if (this.camera) {
-            console.log('takePicAsync', this.camera.takePicAsync);
             this.camera
                 .takePicAsync()
                 .then((base64: string) => {
-                    console.log('BASE64', base64);
                     this.props.onPressNavigate(base64);
                 })
                 .catch(console.log);

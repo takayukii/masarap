@@ -2,6 +2,9 @@
 * This file demonstrates a basic ReactXP app.
 */
 // This example uses ExperimentalNavigation on iOS and Android
+
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
 import RX = require('reactxp');
 import Navigator, {
     NavigatorDelegateSelector as DelegateSelector,
@@ -11,7 +14,8 @@ import Navigator, {
 import CameraView = require('./views/CameraView');
 import ImagesView = require('./views/ImagesView');
 import KeywordsView = require('./views/KeywordsView');
-import Loading = require('./modules/Loading');
+
+const client = new ApolloClient({ uri: 'http://localhost:4000' });
 
 enum NavigationRouteId {
     MainPanel,
@@ -19,8 +23,19 @@ enum NavigationRouteId {
     ThirdPanel
 }
 
-class App extends RX.Component<{}, null> {
+interface AppState {
+    dataUrl: string;
+}
+
+class App extends RX.Component<{}, AppState> {
     private _navigator: Navigator;
+
+    constructor(props: {}) {
+        super(props);
+        this.state = {
+            dataUrl: ''
+        };
+    }
 
     componentDidMount() {
         this._navigator.immediatelyResetRouteStack([
@@ -33,11 +48,13 @@ class App extends RX.Component<{}, null> {
 
     render() {
         return (
-            <Navigator
-                ref={this._onNavigatorRef}
-                renderScene={this._renderScene}
-                delegateSelector={DelegateSelector}
-            />
+            <ApolloProvider client={client}>
+                <Navigator
+                    ref={this._onNavigatorRef}
+                    renderScene={this._renderScene}
+                    delegateSelector={DelegateSelector}
+                />
+            </ApolloProvider>
         );
     }
 
@@ -53,6 +70,7 @@ class App extends RX.Component<{}, null> {
             case NavigationRouteId.SecondPanel:
                 return (
                     <KeywordsView
+                        dataUrl={this.state.dataUrl}
                         onPressNavigate={this._onPressNavigateToThird}
                         onNavigateBack={this._onPressBack}
                     />
@@ -65,34 +83,22 @@ class App extends RX.Component<{}, null> {
         return null;
     };
 
-    private _onPressNavigateToSecond = (message?: string) => {
-        const modalId = 'loading';
-        RX.Modal.show(
-            <Loading onPress={() => {}} message={message ? message.slice(0, 10) : ''} />,
-            modalId
-        );
-        setTimeout(() => {
-            this._navigator.push({
-                routeId: NavigationRouteId.SecondPanel,
-                sceneConfigType: Types.NavigatorSceneConfigType.Fade
-            });
-            setTimeout(() => {
-                RX.Modal.dismiss(modalId);
-            }, 1000);
-        }, 1000);
+    private _onPressNavigateToSecond = (dataUrl: string) => {
+        this.setState({
+            dataUrl
+        });
+        this._navigator.push({
+            routeId: NavigationRouteId.SecondPanel,
+            sceneConfigType: Types.NavigatorSceneConfigType.Fade
+        });
     };
 
     private _onPressNavigateToThird = () => {
-        const modalId = 'loading';
-        RX.Modal.show(<Loading onPress={() => {}} />, modalId);
         setTimeout(() => {
             this._navigator.push({
                 routeId: NavigationRouteId.ThirdPanel,
                 sceneConfigType: Types.NavigatorSceneConfigType.Fade
             });
-            setTimeout(() => {
-                RX.Modal.dismiss(modalId);
-            }, 1000);
         }, 1000);
     };
 

@@ -74,4 +74,4 @@ class Loading extends RX.Component<LoadingProps, RX.Stateless> {
     }
 }
 
-export = Loading;
+export default Loading;

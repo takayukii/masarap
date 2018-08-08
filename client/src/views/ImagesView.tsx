@@ -11,10 +11,6 @@ import theme from '../styles/theme';
 
 const { width, height } = RX.UserInterface.measureWindow();
 
-interface ImagesViewProps {
-    onNavigateBack: () => void;
-}
-
 const styles = {
     container: RX.Styles.createViewStyle({
         flexDirection: 'column',
@@ -60,6 +56,10 @@ const styles = {
         justifyContent: 'center'
     })
 };
+
+interface ImagesViewProps {
+    onNavigateBack: () => void;
+}
 
 class ImagesView extends RX.Component<ImagesViewProps> {
     renderList() {

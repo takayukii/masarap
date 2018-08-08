@@ -2,18 +2,28 @@
 * This file demonstrates a basic ReactXP app.
 */
 
+import { gql } from 'apollo-boost';
+import { Query } from 'react-apollo';
 import RX = require('reactxp');
 
 import BackButton from '../modules/BackButton';
+import Loading from '../modules/Loading';
 
 import theme from '../styles/theme';
 
-const { height } = RX.UserInterface.measureWindow();
-
 interface KeywordsViewProps {
+    dataUrl: string;
     onPressNavigate: () => void;
     onNavigateBack: () => void;
 }
+
+const DECODE = gql`
+    query decode($dataUrl: String!) {
+        words: decodeImage(dataUrl: $dataUrl)
+    }
+`;
+
+const { height } = RX.UserInterface.measureWindow();
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -52,17 +62,12 @@ const styles = {
 };
 
 class KeywordsView extends RX.Component<KeywordsViewProps> {
-    renderList() {
-        const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-        // tslint:disable-next-line:insecure-random
-        const random = Math.floor(Math.random() * list.length);
-        list.splice(random, list.length - random);
-
-        if (list.length > 0) {
-            return list.map(num => (
-                <RX.View key={num} style={styles.listItem}>
+    renderList(data: {words: Array<string>}) {
+        if (data.words.length > 0) {
+            return data.words.map(word => (
+                <RX.View key={word} style={styles.listItem}>
                     <RX.Button onPress={this.props.onPressNavigate}>
-                        <RX.Text style={styles.listItemText}>{num}</RX.Text>
+                        <RX.Text style={styles.listItemText}>{word}</RX.Text>
                     </RX.Button>
                 </RX.View>
             ));
@@ -75,13 +80,24 @@ class KeywordsView extends RX.Component<KeywordsViewProps> {
     }
 
     render() {
+        const { dataUrl } = this.props;
         return (
-            <RX.View useSafeInsets={true} style={styles.container}>
-                <RX.View style={styles.header}>
-                    <BackButton onPress={this._onPressBack} />
-                </RX.View>
-                <RX.ScrollView style={styles.scroll}>{this.renderList()}</RX.ScrollView>
-            </RX.View>
+          <Query query={DECODE} variables={{ dataUrl }}>
+              {({ loading, error, data }) => {
+                  console.log('data', data);
+                  if (loading || error) {
+                      return <Loading />;
+                  }
+                  return (
+                      <RX.View useSafeInsets={true} style={styles.container}>
+                          <RX.View style={styles.header}>
+                              <BackButton onPress={this._onPressBack} />
+                          </RX.View>
+                          <RX.ScrollView style={styles.scroll}>{this.renderList(data)}</RX.ScrollView>
+                      </RX.View>
+                  );
+              }}
+          </Query>
         );
     }
 
