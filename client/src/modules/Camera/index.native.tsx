@@ -10,9 +10,9 @@ class Camera extends RX.Component<CameraProps, null> {
     takePicAsync: () => Promise<string> = () => {
         return new Promise((resolve, reject) => {
             this.camera
-                .takePictureAsync({ quality: 0.5, base64: true })
+                .takePictureAsync({ quality: 0.5, base64: true, width: 400 })
                 .then((result: any) => {
-                    resolve(result.base64);
+                    resolve(`data:image/jpeg;base64,${result.base64}`);
                 })
                 .catch(reject);
         });
