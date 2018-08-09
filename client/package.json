@@ -12,7 +12,7 @@
     "watch-web": "cross-env NODE_ENV=development gulp run --platform=web",
     "watch-ios": "cross-env NODE_ENV=development gulp run --platform=ios",
     "watch-android": "cross-env NODE_ENV=development gulp run --platform=android",
-    "deploy-web": "gulp run-once --platform=web && aws s3 cp ./web/ s3://masarap/ --acl public-read --recursive"
+    "deploy-web": "API_ENDPOINT=https://fc4wys6td2.execute-api.us-east-1.amazonaws.com/dev/graphql gulp run-once --platform=web && aws s3 cp ./web/ s3://masarap/ --acl public-read --recursive"
   },
   "devDependencies": {
     "@types/webpack": "^4.4.0",
