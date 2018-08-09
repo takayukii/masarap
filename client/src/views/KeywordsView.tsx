@@ -76,7 +76,7 @@ class KeywordsView extends RX.Component<KeywordsViewProps> {
         }
         return (
             <RX.View style={styles.notFound}>
-                <RX.Text>Not found.</RX.Text>
+                <RX.Text>No keywords found in a photo.</RX.Text>
             </RX.View>
         );
     }

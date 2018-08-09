@@ -115,7 +115,7 @@ class ImagesView extends RX.Component<ImagesViewProps, ImagesViewState> {
         }
         return (
             <RX.View style={styles.notFound}>
-                <RX.Text>Not found.</RX.Text>
+                <RX.Text>No images found from a keyword.</RX.Text>
             </RX.View>
         );
     }
