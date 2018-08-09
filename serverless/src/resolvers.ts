@@ -21,7 +21,13 @@ const resolvers = {
         decodeImage: async (source: any, args: { dataUrl: string }, ctx: any, info: GraphQLResolveInfo) => {
             const path = base64Img.imgSync(args.dataUrl, '/tmp/', uuidv1());
             const results = await visionClient.textDetection(path);
-            return results[0].textAnnotations.map((result: any) => result.description);
+            const detectedWords = results[0].textAnnotations.map((result: any) => result.description);
+            let words: Array<string> = [];
+            for (const word of detectedWords) {
+                words = words.concat(word.split('\n'));
+            }
+            words = words.filter((word) => word && word.length > 1);
+            return Array.from(new Set(words)); // make it unique
         },
         searchImages: async (source: any, args: { keyword: string }, ctx: any, info: GraphQLResolveInfo) => {
             const response = await searchClient.cse.list(Object.assign(searchOptions, {
