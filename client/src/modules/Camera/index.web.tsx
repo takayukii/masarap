@@ -29,6 +29,12 @@ class Camera extends RX.Component<CameraProps, null> {
 
     handleError = (error: Error) => {
         console.log('navigator.getUserMedia error: ', error);
+        window.navigator.mediaDevices
+            .getUserMedia({ audio: false, video: {} })
+            .then(this.handleSuccess)
+            .catch(error => {
+                console.log('failure for 2nd time: ', error);
+            });
     };
 
     takePicAsync: () => Promise<string> = () => {

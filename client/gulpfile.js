@@ -33,6 +33,8 @@ var tslintEng = require('tslint');
 var util = require('util');
 var watch = require('gulp-watch');
 
+require('dotenv').config(__dirname + '/.env');
+
 var PLATFORMS = {
     WEB: 'web',
     IOS: 'ios',
@@ -370,7 +372,8 @@ function replaceFlags(stream) {
         .pipe(replaceWithSM(/__ANDROID__(?!\s*:\s*boolean)/g, platform === PLATFORMS.ANDROID))
         .pipe(replaceWithSM(/__IOS__(?!\s*:\s*boolean)/g, platform === PLATFORMS.IOS))
         .pipe(replaceWithSM(/__WINDOWS__(?!\s*:\s*boolean)/g, platform === PLATFORMS.WINDOWS))
-        .pipe(replaceWithSM(/__MACOS__(?!\s*:\s*boolean)/g, platform === PLATFORMS.MACOS));
+        .pipe(replaceWithSM(/__MACOS__(?!\s*:\s*boolean)/g, platform === PLATFORMS.MACOS))
+        .pipe(replaceWithSM(/__API_ENDPOINT__(?!\s*:\s*string)/g, JSON.stringify(process.env.API_ENDPOINT)));
 }
 
 function fixRelativePathGlob(pathOrGlob) {
