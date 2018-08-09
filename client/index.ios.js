@@ -1,1 +1,1 @@
-require('./temp/ios/rnapp/js/index');
+require('./temp/ios/rnapp/js/index.web');

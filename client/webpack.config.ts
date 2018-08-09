@@ -11,7 +11,7 @@ const getConfig = require('./buildconfig.js');
 const config = getConfig(platform, isDev);
 
 const webpackConfig: webpack.Configuration = {
-    entry: './src/index.tsx',
+    entry: './src/index.web.tsx',
     mode: 'development',
     output: {
         filename: 'bundle.js',
